@@ -41,12 +41,6 @@ parser.add_argument(
     "--stop-iters", type=int, default=2000, help="Number of iterations to train."
 )
 parser.add_argument(
-    "--stop-timesteps", type=int, default=10000000, help="Number of timesteps to train."
-)
-parser.add_argument(
-    "--stop-reward", type=float, default=150.0, help="Reward at which we stop training."
-)
-parser.add_argument(
     "--rv-rate", type=float, default=1.0, help="RV percentage. 0.0-1.0"
 )
 if __name__ == "__main__":
@@ -54,8 +48,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    ray.init(num_gpus=1, num_cpus=16)
-    # ray.init(local_mode= True)
+    ray.init(num_gpus=1, num_cpus=args.num_cpus)
 
     dummy_env = Env({
             "junction_list":['229','499','332','334'],
@@ -114,7 +107,7 @@ if __name__ == "__main__":
                 'capacity':50000,
             }
         )
-        .rollouts(num_rollout_workers=8, rollout_fragment_length="auto")
+        .rollouts(num_rollout_workers=args.num_cpus-1, rollout_fragment_length="auto")
         .multi_agent(policies=policy, policy_mapping_fn=policy_mapping_fn)
         # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.ass 'ray.rllib.policy.policy_template.DQNTorchPolicy'> for PolicyID=shared_policy
         .resources(num_gpus=1, num_cpus_per_worker=1)
