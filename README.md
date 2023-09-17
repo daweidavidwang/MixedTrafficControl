@@ -1,4 +1,4 @@
-# Reinforcement Learning for Real World Mixed Traffic Control
+# Mixed Traffic Control at Complex Intersections via Multi-agent Reinforcement Learning
 Official code for the paper:
 
 > **Learning to Control and Coordinate Mixed Traffic Through Robot Vehicles at Complex and Unsignalized Intersections**
