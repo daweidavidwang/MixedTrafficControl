@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+*$py.class
+real_data/rawdump.xml
+real_data/traffic_figures/
+*png
+sumolog
