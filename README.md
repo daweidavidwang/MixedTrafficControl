@@ -15,23 +15,36 @@ Official code for the paper:
     Ubuntu
 
 ### Download Docker image
-    docker pull wangdawei1996/ray_sumo:beta4
+    docker pull wangdawei1996/ray_sumo:beta5
 
 ### Run docker container
-    docker run -it --gpus all \
+    docker run -it \
+        -p 0.0.0.0:6006:6006 \
+        --gpus all \
         --shm-size=10.01gb \
-        wangdawei1996/ray_sumo:beta4 bash
+        wangdawei1996/ray_sumo:beta5 bash
 
 ### Run training
     python DQN_run.py --rv-rate 1.0 --stop-iters 2000 --framework torch --num-cpu 16
 
 
 ### Test
-    python DQN_eval.py --rv-rate 1.0 --model-dir /path/to/model --save-dir /path/to/save/folder --framework torch --stop-timesteps 1000
+    python DQN_eval.py --rv-rate 1.0 --model-dir /path/to/model --save-dir /path/to/save/folder --stop-timesteps 1000
 
-## Run with Anaconda
-To be finished
+### Use Tensorborad
+    tensorboard --host 0.0.0.0 --port 6006 --logdir /path/to/ray_results/folder
 
+
+## Setup with Anaconda
+### Install SUMO
+Please follow the official instruction https://sumo.dlr.de/docs/Installing/index.html
+
+We recommend SUMO v 1.12.0
+
+### Setup Conda environment
+    conda create --name MixedTrafficControl python=3.7
+    conda activate MixedTrafficControl
+    pip install -r requirements.txt
 
 ## **Citation**
 

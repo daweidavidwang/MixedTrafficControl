@@ -26,13 +26,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     "--run", type=str, default="DQN", help="The RLlib-registered algorithm to use."
 )
-parser.add_argument("--num-cpus", type=int, default=0)
-parser.add_argument(
-    "--framework",
-    choices=["tf", "tf2", "torch"],
-    default="torch",
-    help="The DL framework specifier.",
-)
+parser.add_argument("--num-cpus", type=int, default=1)
 
 parser.add_argument(
     "--stop-timesteps",
@@ -46,7 +40,7 @@ parser.add_argument(
     "--model-dir", type=str, required=True, help="path to the RL model for evaluation"
 )
 parser.add_argument(
-    "--save-dir", type=float, default=1.0, help="folder directory for saving evaluation results"
+    "--save-dir", type=str, required=True, help="folder directory for saving evaluation results"
 )
 parser.add_argument(
     "--rv-rate", type=float, default=1.0, help="RV percentage. 0.0-1.0"
@@ -104,7 +98,7 @@ if __name__ == "__main__":
             num_episodes += 1
     
     env.monitor.evaluate()
-    save_path = args.save_dir
+    save_path = args.save_dir+'/'+st(args.rv_rate)+'log.pkl'
     env.monitor.evaluate()
     env.monitor.save_to_pickle(file_name = save_path)
     algo.stop()
