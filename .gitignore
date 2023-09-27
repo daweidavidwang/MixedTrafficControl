@@ -6,3 +6,4 @@ real_data/rawdump.xml
 real_data/traffic_figures/
 *png
 sumolog
+.vscode/
