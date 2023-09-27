@@ -213,6 +213,18 @@ def detect_all_junctions(map_xml):
             junction_list.extend([JuncID])
     return junction_list
 
+def detect_start_end_edges(map_xml):
+    net_data, connection_data, junction_data = map_parser(map_xml)
+    start_edges = []
+    end_edges = []
+    for edge_id in net_data.keys():
+        if edge_id not in connection_data['next'].keys() and edge_id[0]!=':':
+            end_edges.extend([edge_id])
+        if edge_id not in connection_data['prev'].keys() and edge_id[0]!=':':
+            start_edges.extend([edge_id])
+    return start_edges, end_edges
+    
 if __name__ == "__main__":
-    junction_list = detect_all_junctions('/code/MixedTrafficRouting/map_tools/manhattan/net.net.xml')
+    # junction_list = detect_all_junctions('/code/MixedTrafficRouting/map_tools/manhattan/net.net.xml')
+    start, end = detect_start_end_edges('/home/david/code/MixedTrafficRouting/real_data/colorado_global_routing.xml')
     print(junction_list)
