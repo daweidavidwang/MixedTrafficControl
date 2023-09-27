@@ -1,5 +1,6 @@
-
-from utils import map_parser
+import sys, os
+sys.path.append(os.getcwd())
+from core.utils import map_parser
 from copy import deepcopy
 import math
     
