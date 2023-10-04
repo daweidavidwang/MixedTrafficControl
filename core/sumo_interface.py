@@ -158,6 +158,10 @@ class SUMO(object):
     def get_vehicle_edge(self, veh_id):
         return self.tc.vehicle.getRoadID(veh_id)
 
+    def find_route(self, start_edge, end_edge):
+        ## find the fastest route for vehicle
+        return self.tc.simulation.findRoute(start_edge, end_edge)
+
     def get_veh_waiting_time(self, veh):
         return self.tc.vehicle.getWaitingTime(veh.id), self.tc.vehicle.getAccumulatedWaitingTime(veh.id)
 
