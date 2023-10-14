@@ -8,7 +8,7 @@ Official code for the paper:
 > <a href='https://arxiv.org/abs/2301.05294'><img src='https://img.shields.io/badge/arXiv-2301.05294-red'></a> <a href='https://sites.google.com/view/mixedtrafficcontrol/'><img src='https://img.shields.io/badge/Project-Video-Green'></a>
 
 
-## Run with Docker (recommended)
+## Setup with Docker (recommended)
 ### Requirements
     docker
     nvidia-docker
@@ -24,6 +24,17 @@ Official code for the paper:
         --shm-size=10.01gb \
         wangdawei1996/ray_sumo:beta5 bash
 
+## Setup with Anaconda
+### Install SUMO
+Please follow the official instruction https://sumo.dlr.de/docs/Installing/index.html
+
+We recommend SUMO v 1.12.0
+
+### Setup Conda environment
+    conda create --name MixedTrafficControl python=3.7
+    conda activate MixedTrafficControl
+    pip install -r requirements.txt
+
 ### Run training
     python DQN_run.py --rv-rate 1.0 --stop-iters 2000 --framework torch --num-cpu 16
 
@@ -35,16 +46,7 @@ Official code for the paper:
     tensorboard --host 0.0.0.0 --port 6006 --logdir /path/to/ray_results/folder
 
 
-## Setup with Anaconda
-### Install SUMO
-Please follow the official instruction https://sumo.dlr.de/docs/Installing/index.html
 
-We recommend SUMO v 1.12.0
-
-### Setup Conda environment
-    conda create --name MixedTrafficControl python=3.7
-    conda activate MixedTrafficControl
-    pip install -r requirements.txt
 
 ## **Citation**
 
