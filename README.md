@@ -14,6 +14,8 @@ Official code for the paper:
     nvidia-docker
     Ubuntu
 
+We highly recommend installing on Ubuntu 22.04 as this version of Ubuntu has been tested. If you have a Windows machine, we recommend using WSL to create an Ubuntu 22.04 virtual machine for setting up the repo.
+
 Install docker on your version of Ubuntu by following the instructions provided [here](https://docs.docker.com/engine/install/ubuntu/).
 Follow the steps under the heading "Install using the Apt repository."
 
@@ -31,6 +33,11 @@ Follow the steps under the headings "Installing with Apt" and "Configuring Docke
         wangdawei1996/ray_sumo:beta5 bash
 
 ## Setup with Anaconda (recommended)
+### Requirements
+    Ubuntu
+
+We highly recommend installing on Ubuntu 22.04 as this version of Ubuntu has been tested. If you have a Windows machine, we recommend using WSL to create an Ubuntu 22.04 virtual machine for setting up the repo.
+
 ### Install SUMO
 Please follow the official instructions provided [here](https://sumo.dlr.de/docs/Installing/index.html).
 It should involve just running the following command:
@@ -52,6 +59,8 @@ python DQN_run.py --rv-rate 1.0 --stop-iters 1000 --framework torch --num-cpu 16
 ```       
 
 Depending on your CPU, you may need to lower num-cpu to a smaller value. The rv-rate value can be anything between 0 to 1.0. Tensorflow 1 and Tensorflow 2 can be selected as the framework by providing "tf" or "tf2", respectively, as the framework; however, we recommend using torch (PyTorch) as the framework.
+
+During training, you should expect to see "nan" as the reward values for the first 15 iterations of training. After those iterations, the values will update in those fields. Additionally, warnings will be given during training. These warnings are okay and do not affect training.
 
 For reference, an example reward curve after training using the above command should look like:
 ![reward_curve](img/reward_curve.png)
