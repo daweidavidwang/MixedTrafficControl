@@ -44,7 +44,7 @@ It should involve just running the following command:
 ```
 sudo apt-get install sumo sumo-tools sumo-doc
 ```
-We recommend SUMO v1.12.0
+We recommend SUMO v1.12.0. If you use a later version of SUMO, be aware that the units for fuel consumption are different on later versions. The resulting number is the same as older versions, only the units are different.
 
 ### Setup Conda environment
     conda create --name MixedTrafficControl python=3.7
