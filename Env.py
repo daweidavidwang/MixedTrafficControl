@@ -629,6 +629,11 @@ class Env(MultiAgentEnv):
     def step(self, action={}):
         if len(action) == 0:
             print("empty action")
+
+        # uncomment if doing 100% HVs with traffic lights workaround
+        # for veh_id in action.keys():
+        #     action[veh_id] = 1
+
         obs, rewards, dones, truncated, infos = self.step_once(action)
 
         ## avoid empty obs or all agents are done during simulation

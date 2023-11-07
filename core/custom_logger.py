@@ -61,6 +61,9 @@ class CustomLoggerCallback(DefaultCallbacks):
         episode.custom_metrics["conflict_rate"] = np.mean(episode.user_data["conflict_rate"])
         episode.custom_metrics["avg_wait"] = np.mean(episode.user_data["avg_wait"])
 
+        # uncomment if doing 100% HVs with traffic lights workaround
+        # worker.env.monitor.evaluate() 
+
 
 
 

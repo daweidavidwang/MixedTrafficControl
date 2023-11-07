@@ -90,7 +90,7 @@ if __name__ == "__main__":
             "conflict_mechanism":'flexible',
             "traffic_light_program":{
                 "disable_state":'G',
-                "disable_light_start":0
+                "disable_light_start":0 # 20000 for traffic lights
             }
         }, 
         auto_wrap_old_gym_envs=False)
