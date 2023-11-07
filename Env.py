@@ -500,7 +500,6 @@ class Env(MultiAgentEnv):
         #sumo step
         self.sumo_interface.step()
 
-
         # gathering states from sumo 
         sim_res = self.sumo_interface.get_sim_info()
         # setup for new departed vehicles    
@@ -630,13 +629,10 @@ class Env(MultiAgentEnv):
         if len(action) == 0:
             print("empty action")
 
-        # uncomment if doing 100% HVs with traffic lights workaround
-        # for veh_id in action.keys():
-        #     action[veh_id] = 1
-
         obs, rewards, dones, truncated, infos = self.step_once(action)
 
-        ## avoid empty obs or all agents are done during simulation
+        # COMMENT OUT THE FOLLOWING LINES IF DOING BASELINE SCRIPTS
+        # avoid empty obs or all agents are done during simulation
         all_done = True
         for id in dones.keys():
             if not dones[id] and id!='__all__':
@@ -649,6 +645,7 @@ class Env(MultiAgentEnv):
             for id in new_obs.keys():
                 obs[id] = new_obs[id]
                 dones[id] = new_dones[id]
+
         return obs, rewards, dones, truncated, infos
 
 

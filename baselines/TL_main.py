@@ -54,12 +54,12 @@ if __name__ == "__main__":
     dones = truncated = {}
     dones['__all__'] = truncated['__all__'] = False
 
-
     obs, info = env.reset(options={'mode': 'HARD'})
 
     while not dones['__all__'] and not truncated['__all__']:
         actions = {}
         obs, reward, dones, truncated, info = env.step(actions)
+
         for key, done in dones.items():
             if done:
                 obs.pop(key)
