@@ -412,7 +412,7 @@ class Env(MultiAgentEnv):
 
 
         for veh in self.vehicles:
-            if len(veh.road_id)==0:
+            if 'road_id' not in veh.keys() or len(veh.road_id)==0:
                 ## avoid invalid vehicle information
                 continue
             if veh.road_id[0] == ':':
@@ -509,12 +509,24 @@ class Env(MultiAgentEnv):
             length = self.sumo_interface.tc.vehicle.getLength(veh_id)
             route = self.sumo_interface.tc.vehicle.getRoute(veh_id)
             road_id  = self.sumo_interface.get_vehicle_edge(veh_id)
-            if (road_id in self.spawn_rl_prob.keys() and random.random()<self.spawn_rl_prob[road_id]) or \
-                (random.random()<self.default_rl_prob):
-                self.rl_vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length)
-                self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length, wait_time=0)
+            if (road_id in self.spawn_rl_prob.keys()):
+                if random.random()<self.spawn_rl_prob[road_id]:
+                    self.rl_vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length, road_id=road_id)
+                    self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length, wait_time=0, road_id=road_id)
+                    self.rl_vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
+                    self.vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
+                else:
+                    self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="IDM", route=route, length=length, wait_time=0, road_id=road_id)
+                    self.vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
             else:
-                self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="IDM", route=route, length=length, wait_time=0)
+                if (random.random()<self.default_rl_prob):
+                    self.rl_vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length, road_id=road_id)
+                    self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="RL", route=route, length=length, wait_time=0, road_id=road_id)
+                    self.rl_vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
+                    self.vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
+                else:
+                    self.vehicles[veh_id] = veh = Vehicle(id=veh_id, type="IDM", route=route, length=length, wait_time=0, road_id=road_id)
+                    self.vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
                 
             self.sumo_interface.set_color(veh, WHITE if veh.type=="IDM" else RED)
 
@@ -522,7 +534,7 @@ class Env(MultiAgentEnv):
 
         self.new_arrived = {self.vehicles[veh_id] for veh_id in sim_res.arrived_vehicles_ids}
         self.new_collided = {self.vehicles[veh_id] for veh_id in sim_res.colliding_vehicles_ids}
-        self.new_arrived -= self.new_collided # Don't count collided vehicles as "arrived"
+        # self.new_arrived -= self.new_collided # Don't count collided vehicles as "arrived"
 
         # remove arrived vehicles from Env
         for veh in self.new_arrived:
@@ -534,6 +546,9 @@ class Env(MultiAgentEnv):
         # update vehicles' info for Env
         for veh_id, veh in self.vehicles.items():
             veh.prev_speed = veh.get('speed', None)
+            if veh_id in sim_res.colliding_vehicles_ids:
+                ## not update collided vehicles
+                continue
             veh.update(self.sumo_interface.subscribes.veh.get(veh_id))
             if veh.type == 'RL':
                 self.rl_vehicles[veh_id].update(self.sumo_interface.subscribes.veh.get(veh_id))
