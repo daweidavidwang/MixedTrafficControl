@@ -10,7 +10,7 @@ import numpy as np
 import ray
 from ray import air, tune
 from ray.rllib.algorithms.dqn import DQNConfig, DQNTorchPolicy
-from Env import Env
+
 from ray.rllib.examples.models.shared_weights_model import (
     SharedWeightsModel1,
     SharedWeightsModel2,
@@ -81,6 +81,7 @@ class MixedTrafficControlInference(object):
 
 
 def export():
+    from Env import Env
     # args = parser.parse_args()
     env = Env({
             "junction_list":['229','499','332','334'],
