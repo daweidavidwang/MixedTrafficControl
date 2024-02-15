@@ -68,6 +68,9 @@ class rainbow_model(nn.Module):
         probs_or_logits = support_prob_per_action
         return value, logits, probs_or_logits, state, torch.argmax(value)
 
+    def close(self):
+        self.algo.stop()
+
 class MixedTrafficControlInference(object):
     def __init__(self, onnx_model_path):
         self.onnx_model_path = onnx_model_path
@@ -80,7 +83,7 @@ class MixedTrafficControlInference(object):
 
 
 
-def export():
+def export(checkpoint_path, onnx_path):
     from Env import Env
     # args = parser.parse_args()
     env = Env({
@@ -98,15 +101,15 @@ def export():
             }
         })
     # ray.init(num_cpus=args.num_cpus or None)
-    ray.init(local_mode= True)
+    
 
-    checkpoint_path = "/home/david/Documents/MixedTrafficControl_models/best_models(July31)/DQN_RV0.5/checkpoint_000500"
+
     # algo = Algorithm.from_checkpoint(checkpoint_path)
     # algo.export_policy_model('model.onnx', policy_id="shared_policy", onnx=11)
     # algo.stop()
 
     # ray.shutdown()
-    onnx_path = '/home/david/code/MixedTrafficControl/model.onnx'
+
     model = rainbow_model(checkpoint_path)
     policy_ptr = model.policy
     policy_ptr._lazy_tensor_dict(policy_ptr._dummy_batch)
@@ -138,6 +141,7 @@ def export():
                     for k in list(dummy_inputs.keys())
                     + ["state_ins", SampleBatch.SEQ_LENS]
     })
+    model.close()
 
 
 def try_inference(model_path):
@@ -176,4 +180,12 @@ def try_inference(model_path):
             num_episodes += 1
 
 if __name__ == "__main__":
-    try_inference('model.onnx')
+    # try_inference('model.onnx')
+    ray.init(local_mode= True)
+    rv_rate_list = [ 0.6, 0.7, 0.8, 0.9, 1.0]
+# 0.1, 0.2, 0.3, 0.4, 0.5,
+    for rv_rate in rv_rate_list:
+        checkpoint_path = '/home/david/Documents/MixedTrafficControl_models/best_models(July31)/DQN_RV'+str(rv_rate)+'/checkpoint_000500'
+        onnx_path = '/home/david/code/MixedTrafficControl/onnx/'+str(rv_rate)+'_model.onnx'
+
+        export(checkpoint_path, onnx_path)

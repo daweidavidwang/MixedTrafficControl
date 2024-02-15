@@ -26,3 +26,4 @@ torchvision
 torchaudio 
 higher
 ray[rllib]==2.5.0
+onnxruntime
