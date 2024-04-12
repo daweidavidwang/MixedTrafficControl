@@ -3,7 +3,8 @@ from ray.rllib.algorithms.ppo import PPOConfig
 import argparse
 import os
 import random
-
+import sys
+sys.path.append(os.getcwd())
 import ray
 from ray import air, tune
 from ray.rllib.algorithms.dqn import DQNConfig, DQNTorchPolicy

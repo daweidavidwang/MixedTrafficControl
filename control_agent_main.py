@@ -13,11 +13,12 @@ def main():
     env = Env({
             "junction_list":['229','499','332','334'],
             "spawn_rl_prob":{},
-            "probablity_RL":1.0,
-            "cfg":'real_data/osm_global_routing.sumocfg',
-            "render":True,
-            "map_xml":'real_data/colorado_global_routing.xml',
+            "probablity_RL":0.5,
+            "cfg":'real_data/osm.sumocfg',
+            "render":False,
+            "map_xml":'real_data/CSeditClean_1.net_threelegs.xml',
             "max_episode_steps":1000,
+            "conflict_mechanism":'flexible',
             "traffic_light_program":{
                 "disable_state":'G',
                 "disable_light_start":0

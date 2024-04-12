@@ -695,6 +695,36 @@ class Env(MultiAgentEnv):
             for agent_id in agent_ids
             if agent_id != "__all__"
         }
+        
+    def queue_rv_detect(self, edge_id, lane_id):
+        JuncID = self.map.get_facing_intersection(edge_id=edge_id)
+        dir, label = self.map.qurey_edge_direction(edge_id=edge_id, lane_id=lane_id)
+        if label:
+            keyword = label+dir
+            rv_num, hv_num = 0, 0
+            for veh in self.queue_by_lane_index[JuncID][keyword][lane_id]:
+                if veh.type == 'IDM':
+                    hv_num += 1
+                else:
+                    return True
+            return False
+        else:
+            return False
+
+    def queue_rv_detect_num(self, edge_id, lane_id):
+        JuncID = self.map.get_facing_intersection(edge_id=edge_id)
+        dir, label = self.map.qurey_edge_direction(edge_id=edge_id, lane_id=lane_id)
+        if label:
+            keyword = label+dir
+            rv_num, hv_num = 0, 0
+            for veh in self.queue_by_lane_index[JuncID][keyword][lane_id]:
+                if veh.type == 'IDM':
+                    hv_num += 1
+                else:
+                    rv_num += 1
+            return hv_num, rv_num
+        else:
+            return 0.0, 0.0
 
 
     def observation_space_sample(self, agent_ids: list = None):

@@ -59,6 +59,10 @@ if __name__ == "__main__":
 
     rv_rate = args.rv_rate
 
+    from onnx_inference import MixedTrafficControlInference
+    model_path = '/home/david/code/MixedTrafficControl/onnx/1.0_model.onnx'
+    decider = MixedTrafficControlInference(model_path)
+
     checkpoint_path = args.model_dir
     algo = Algorithm.from_checkpoint(checkpoint_path)
     
@@ -84,11 +88,12 @@ if __name__ == "__main__":
 
 
     obs, info = env.reset()
-
+    
     while not dones['__all__'] and not truncated['__all__']:
         actions = {}
         for agent_id, agent_obs in obs.items():
             actions[agent_id] = algo.compute_single_action(agent_obs, explore=args.explore_during_inference ,policy_id="shared_policy")
+            actions[agent_id] = decider.forward(agent_obs)
         obs, reward, dones, truncated, info = env.step(actions)
         for key, done in dones.items():
             if done:
@@ -98,7 +103,7 @@ if __name__ == "__main__":
             num_episodes += 1
     
     env.monitor.evaluate()
-    save_path = args.save_dir+'/'+st(args.rv_rate)+'log.pkl'
+    save_path = args.save_dir+'/'+str(args.rv_rate)+'log.pkl'
     env.monitor.evaluate()
     env.monitor.save_to_pickle(file_name = save_path)
     algo.stop()
