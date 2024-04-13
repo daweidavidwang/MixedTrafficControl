@@ -45,6 +45,8 @@ class NetMap(object):
                 return 'straight'
             elif 'left' in edge_list[edge_id] and lane_id in edge_list[edge_id]['left']:
                 return 'left'
+            elif 'right' in edge_list[edge_id] and lane_id in edge_list[edge_id]['right']:
+                return 'right'
             else:
                 return 'unidentified'
         results = []
@@ -291,6 +293,8 @@ class NetMap(object):
                 return 'left', self.intersection_edge_recursive[edge_id]['edge_label']
             elif 'straight' in self.intersection_edge_recursive[edge_id] and lane_id in self.intersection_edge_recursive[edge_id]['straight']:
                 return 'straight', self.intersection_edge_recursive[edge_id]['edge_label']
+            elif 'right' in self.intersection_edge_recursive[edge_id] and lane_id in self.intersection_edge_recursive[edge_id]['right']:
+                return 'right', self.intersection_edge_recursive[edge_id]['edge_label']
             else:
                 return 'wrong', None
         except:
@@ -306,6 +310,8 @@ class NetMap(object):
                 return 'left', self.intersection_edge[prev_info[0][0]]['edge_label']
             elif 'straight' in self.intersection_edge[prev_info[0][0]] and prev_info[0][1] in self.intersection_edge[prev_info[0][0]]['straight']:
                 return 'straight', self.intersection_edge[prev_info[0][0]]['edge_label']
+            elif 'right' in self.intersection_edge[prev_info[0][0]] and prev_info[0][1] in self.intersection_edge[prev_info[0][0]]['right']:
+                return 'right', self.intersection_edge[prev_info[0][0]]['edge_label']
             else:
                 return 'wrong', None
         except:
@@ -317,13 +323,16 @@ class NetMap(object):
             return 'straight'
         elif 'left' in self.intersection_edge[edge] and lane_id in self.intersection_edge[edge]['left']:
             return 'left'
+        elif 'right' in self.intersection_edge[edge] and lane_id in self.intersection_edge[edge]['right']:
+            return 'right'
         else:
             return 'unidentified'
 
     def check_veh_location_to_control(self, veh):
         return True if (veh.road_id in self.intersection_edge) and \
             (('straight' in self.intersection_edge[veh.road_id] and veh.lane_index in self.intersection_edge[veh.road_id]['straight'])\
-                 or ('left' in self.intersection_edge[veh.road_id] and veh.lane_index in self.intersection_edge[veh.road_id]['left'])) \
+                 or ('left' in self.intersection_edge[veh.road_id] and veh.lane_index in self.intersection_edge[veh.road_id]['left']) \
+                    or ('right' in self.intersection_edge[veh.road_id] and veh.lane_index in self.intersection_edge[veh.road_id]['right'])) \
                      else False
     
     def get_veh_moving_direction(self, veh):

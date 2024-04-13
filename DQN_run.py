@@ -24,7 +24,7 @@ tf1, tf, tfv = try_import_tf()
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--num-cpus", type=int, default=0)
+parser.add_argument("--num-cpus", type=int, default=10)
 parser.add_argument(
     "--framework",
     choices=["tf", "tf2", "torch"],
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     ray.init(num_gpus=1, num_cpus=args.num_cpus)
 
     dummy_env = Env({
-            "junction_list":['229','499','332','334'],
+            "junction_list":['229','499','332','334','140'],
             "spawn_rl_prob":{},
             "probablity_RL":args.rv_rate,
             "cfg":'real_data/osm.sumocfg',
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     config = (
         DQNConfig()
         .environment(Env, env_config={
-            "junction_list":['229','499','332','334'],
+            "junction_list":['229','499','332','334','140'],
             "spawn_rl_prob":{},
             "probablity_RL":args.rv_rate,
             "cfg":'real_data/osm.sumocfg',

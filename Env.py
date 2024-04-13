@@ -29,7 +29,7 @@ class Env(MultiAgentEnv):
         self.print_debug = False
         self.cfg = config['cfg']
         self.map_xml = config['map_xml']
-        self.keywords_order = ['topstraight', 'topleft','rightstraight', 'rightleft','bottomstraight', 'bottomleft', 'leftstraight', 'leftleft']
+        self.keywords_order = ['topstraight', 'topleft','topright','rightstraight', 'rightleft','rightright','bottomstraight', 'bottomleft','bottomright', 'leftstraight', 'leftleft','leftright']
         self._max_episode_steps = 10000000 ## unlimited simulation horizon   
         if 'max_episode_steps' in config.keys():
             self._max_episode_steps = self.config['max_episode_steps']
@@ -78,7 +78,7 @@ class Env(MultiAgentEnv):
     @property
     def n_obs(self):
         ## TODO defination of obs
-        return 80+16
+        return 120+24
     
     @property
     def action_space(self):
@@ -142,6 +142,7 @@ class Env(MultiAgentEnv):
         self.control_queue = dict()
         self.control_queue_waiting_time = dict()        
         self.queue = dict()
+        self.queue_by_lane_index = dict()
         self.queue_waiting_time = dict()
         self.head_of_control_queue = dict()
         self.inner_speed = dict()
@@ -149,6 +150,7 @@ class Env(MultiAgentEnv):
             self.control_queue[JuncID] = dict()
             self.control_queue_waiting_time[JuncID] = dict()
             self.queue[JuncID] = dict()
+            self.queue_by_lane_index[JuncID] = dict()
             self.queue_waiting_time[JuncID] = dict()
             self.head_of_control_queue[JuncID] = dict()
             self.inner_speed[JuncID] = []
@@ -156,8 +158,11 @@ class Env(MultiAgentEnv):
                 self.control_queue[JuncID][keyword] = []
                 self.control_queue_waiting_time[JuncID][keyword] = []
                 self.queue[JuncID][keyword] = []
+                self.queue_by_lane_index[JuncID][keyword] = dict()
                 self.queue_waiting_time[JuncID][keyword] = []
                 self.head_of_control_queue[JuncID][keyword] = []
+                for lane_id in range(10):
+                    self.queue_by_lane_index[JuncID][keyword][lane_id] = []
 
 
         ## global reward related        
@@ -450,6 +455,7 @@ class Env(MultiAgentEnv):
                 if self.map.get_distance_to_intersection(veh)<=self.control_zone_length:
                     self.queue[JuncID][keyword].extend([veh])
                     self.queue_waiting_time[JuncID][keyword].extend([self.veh_waiting_juncs[veh.id][JuncID]])
+                    self.queue_by_lane_index[JuncID][keyword][veh.lane_index].extend([veh])
                     if veh.type == 'RL':
                         self.control_queue[JuncID][keyword].extend([veh])
                         self.control_queue_waiting_time[JuncID][keyword].extend([self.veh_waiting_juncs[veh.id][JuncID]])
@@ -580,7 +586,7 @@ class Env(MultiAgentEnv):
                 if virtual_id in action.keys():
                     ## reward
                     rewards[virtual_id] = self.reward_compute(rl_veh, obs_waiting_lst, action[virtual_id], JuncID, ego_dir)
-                obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (80,)))))
+                obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (120,)))))
                 dones[virtual_id] = False
             elif virtual_id in action.keys():
                 ## update reward for the vehicle already enter intersection
@@ -593,7 +599,7 @@ class Env(MultiAgentEnv):
                     obs_waiting_lst = self.norm_value(obs_waiting_lst, self.max_wait_time, 0)
                     rewards[virtual_id] = self.reward_compute(rl_veh, obs_waiting_lst, action[virtual_id], JuncID, ego_dir)
                     dones[virtual_id] = True
-                    obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (80,)))))
+                    obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (120,)))))
                     self.terminate_veh(virtual_id)
                 else:
                     ## change to right turn lane and no need to control
@@ -604,7 +610,7 @@ class Env(MultiAgentEnv):
                     obs_waiting_lst = self.norm_value(obs_waiting_lst, self.max_wait_time, 0)
                     rewards[virtual_id] = 0
                     dones[virtual_id] = True
-                    obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (80,)))))
+                    obs[virtual_id] = self.check_obs_constraint(np.concatenate((obs_control_queue_length, np.array(obs_waiting_lst), np.reshape(np.array(obs_inner_lst), (120,)))))
                     self.terminate_veh(virtual_id)    
         dones['__all__'] = False
         infos = {}
