@@ -57,7 +57,7 @@ if __name__ == "__main__":
         dummy_env = Env({
                 "junction_list":['229','499','332','334','140'],
                 "spawn_rl_prob":{},
-                "probablity_RL":args.rv_rate,
+                "probablity_RL":rv_rate,
                 "cfg":'real_data/osm.sumocfg',
                 "render":False,
                 "map_xml":'real_data/CSeditClean_1.net_threelegs.xml',
@@ -85,7 +85,7 @@ if __name__ == "__main__":
             .environment(Env, env_config={
                 "junction_list":['229','499','332','334','140'],
                 "spawn_rl_prob":{},
-                "probablity_RL":args.rv_rate,
+                "probablity_RL":rv_rate,
                 "cfg":'real_data/osm.sumocfg',
                 "render":False,
                 "map_xml":'real_data/CSeditClean_1.net_threelegs.xml',
