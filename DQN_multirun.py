@@ -61,7 +61,7 @@ if __name__ == "__main__":
                 "cfg":'real_data/osm.sumocfg',
                 "render":False,
                 "map_xml":'real_data/CSeditClean_1.net_threelegs.xml',
-                "max_episode_steps":1000,
+                "max_episode_steps":1500,
                 "conflict_mechanism":'flexible',
                 "traffic_light_program":{
                     "disable_state":'G',
@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 "render":False,
                 "map_xml":'real_data/CSeditClean_1.net_threelegs.xml',
                 # "rl_prob_range": [i*0.1 for i in range(5, 10)], # change RV penetration rate when reset
-                "max_episode_steps":1000,
+                "max_episode_steps":1500,
                 "conflict_mechanism":'flexible',
                 "traffic_light_program":{
                     "disable_state":'G',

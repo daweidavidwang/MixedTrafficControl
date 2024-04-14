@@ -305,14 +305,20 @@ class Env(MultiAgentEnv):
         if self.conflict_resolve_mechanism_type=='flexible':
             if ori in self.previous_global_waiting[junc]['largest']:
                 for key in self.inner_lane_occmap[junc].keys():
+                    if key[-5:] == 'right':
+                        continue
                     if max(self.inner_lane_occmap[junc][key][:3])>0 and key not in allowing_ori:
                         return True
             else:
                 for key in self.inner_lane_occmap[junc].keys():
+                    if key[-5:] == 'right':
+                        continue
                     if max(self.inner_lane_occmap[junc][key][:8])>0 and key not in allowing_ori:
                         return True
         elif self.conflict_resolve_mechanism_type=='standard':
             for key in self.inner_lane_occmap[junc].keys():
+                if key[-5:] == 'right':
+                    continue
                 if max(self.inner_lane_occmap[junc][key][:8])>0 and key not in allowing_ori:
                     return True
         elif self.conflict_resolve_mechanism_type=='off':
