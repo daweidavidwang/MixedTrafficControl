@@ -56,36 +56,36 @@ class DataMonitor(object):
             [len(env.conflict_vehids)/len(env.previous_action) if len(env.previous_action) else 0]
             )
         ## failure control record
-        total_num_record = 0
-        total_fail_record = 0
-        total_num = 0
-        total_lane = 0
-        for JuncID in env.junction_list:
-            for EdgeID in env.map.junction_incoming_edges[JuncID]:
-                total_num = 0
-                total_lane = 0
-                for lane_idx in env.map.intersection_edge[EdgeID]['straight']:
-                    dir, label = env.map.qurey_edge_direction(EdgeID, lane_idx)
-                    total_lane += 1
-                    if not env.queue_rv_detect(EdgeID, lane_idx):
-                        total_num += 1
-                if label:
-                    keyword = label+dir
-                    self.data_record[JuncID][keyword]['failure_control_index'][t] = total_num/total_lane
-                    total_num_record += total_lane
-                    total_fail_record += total_num
-                total_num = 0
-                total_lane = 0
-                for lane_idx in env.map.intersection_edge[EdgeID]['left']:
-                    dir, label = env.map.qurey_edge_direction(EdgeID, lane_idx)
-                    total_lane += 1
-                    if not env.queue_rv_detect(EdgeID, lane_idx):
-                        total_num += 1
-                if label:
-                    keyword = label+dir
-                    self.data_record[JuncID][keyword]['failure_control_index'][t] = total_num/total_lane
-                    total_num_record += total_lane
-                    total_fail_record += total_num
+        # total_num_record = 0
+        # total_fail_record = 0
+        # total_num = 0
+        # total_lane = 0
+        # for JuncID in env.junction_list:
+        #     for EdgeID in env.map.junction_incoming_edges[JuncID]:
+        #         total_num = 0
+        #         total_lane = 0
+        #         for lane_idx in env.map.intersection_edge[EdgeID]['straight']:
+        #             dir, label = env.map.qurey_edge_direction(EdgeID, lane_idx)
+        #             total_lane += 1
+        #             if not env.queue_rv_detect(EdgeID, lane_idx):
+        #                 total_num += 1
+        #         if label:
+        #             keyword = label+dir
+        #             self.data_record[JuncID][keyword]['failure_control_index'][t] = total_num/total_lane
+        #             total_num_record += total_lane
+        #             total_fail_record += total_num
+        #         total_num = 0
+        #         total_lane = 0
+        #         for lane_idx in env.map.intersection_edge[EdgeID]['left']:
+        #             dir, label = env.map.qurey_edge_direction(EdgeID, lane_idx)
+        #             total_lane += 1
+        #             if not env.queue_rv_detect(EdgeID, lane_idx):
+        #                 total_num += 1
+        #         if label:
+        #             keyword = label+dir
+        #             self.data_record[JuncID][keyword]['failure_control_index'][t] = total_num/total_lane
+        #             total_num_record += total_lane
+        #             total_fail_record += total_num
 
                     
     def evaluate(self, min_step = 500, max_step = 1000):
