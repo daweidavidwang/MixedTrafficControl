@@ -74,7 +74,12 @@ class Env(MultiAgentEnv):
         # self.reward_mode = 'ego_only'
         # self.reward_mode = 'PN_ego'
         self.reward_mode = 'wait_only'
-
+        self.observation_space = Box(
+            low=-1,
+            high=1,
+            shape=(self.n_obs, ),
+            dtype=np.float32)
+            
     @property
     def n_obs(self):
         ## TODO defination of obs
@@ -83,15 +88,7 @@ class Env(MultiAgentEnv):
     @property
     def action_space(self):
         return Discrete(2)
-
-    @property
-    def observation_space(self):
-        return Box(
-            low=-1,
-            high=1,
-            shape=(self.n_obs, ),
-            dtype=np.float32)
-    
+ 
     @property
     def env_step(self):
         return self._step
